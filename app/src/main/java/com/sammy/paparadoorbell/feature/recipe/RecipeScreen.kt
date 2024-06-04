@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -31,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -43,7 +46,7 @@ fun RecipeScreen() {
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.33f),
-            contentAlignment = Alignment.BottomCenter
+            contentAlignment = Alignment.Center
         ) {
             Image(
                 painter = painterResource(id = R.drawable.recipedonuts),
@@ -55,23 +58,39 @@ fun RecipeScreen() {
                     .blur(radius = 5.dp)
             )
 
-            TextField(value = "",
-                onValueChange = { },
-                placeholder = { Text("Search",fontSize = 14.sp, color = Color.White) },
-                modifier = Modifier
-                    .height(IntrinsicSize.Min)
-                    .size(350.dp, 50.dp)
-                    .padding(start = 16.dp, end = 16.dp)
-                    .clip(RoundedCornerShape(32.dp)),
-                colors = TextFieldDefaults.colors(
-                    unfocusedContainerColor = Color(0xFFF4526A),
-                    unfocusedIndicatorColor = Color(0xFFF4526A),
-                    focusedContainerColor = Color(0xFFF4526A),
-                    focusedIndicatorColor = Color(0xFFF4526A),
-                    disabledIndicatorColor = Color(0xFFF4526A)
-                ),
-                trailingIcon = { Icon(Icons.Filled.Search, contentDescription = "Search",tint = Color.White) })
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Bottom,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    modifier = Modifier.padding(horizontal = 80.dp),
+                    text = "What do you want to cook today?",
+                    fontSize = 28.sp,
+                    style = MaterialTheme.typography.titleMedium,
+                    textAlign = TextAlign.Center,
+                    color = Color.White
+                )
+                Spacer(modifier = Modifier.height(100.dp))
+                TextField(value = "",
+                    onValueChange = { },
+                    placeholder = { Text("Search",fontSize = 14.sp, color = Color.White) },
+                    modifier = Modifier
+                        .height(IntrinsicSize.Min)
+                        .size(350.dp, 50.dp)
+                        .padding(start = 16.dp, end = 16.dp)
+                        .clip(RoundedCornerShape(32.dp)),
+                    colors = TextFieldDefaults.colors(
+                        unfocusedContainerColor = Color(0xFFF4526A),
+                        unfocusedIndicatorColor = Color(0xFFF4526A),
+                        focusedContainerColor = Color(0xFFF4526A),
+                        focusedIndicatorColor = Color(0xFFF4526A),
+                        disabledIndicatorColor = Color(0xFFF4526A)
+                    ),
+                    trailingIcon = { Icon(Icons.Filled.Search, contentDescription = "Search",tint = Color.White) })
+            }
         }
+
 
         Column(
             modifier = Modifier
