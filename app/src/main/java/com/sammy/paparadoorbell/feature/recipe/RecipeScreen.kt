@@ -25,6 +25,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
@@ -34,13 +36,22 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.sammy.paparadoorbell.R
 
 @Composable
-fun RecipeScreen() {
+fun RecipeScreen(
+    viewModel: RecipeViewModel = hiltViewModel(),
+    onCharacterClick: (Int) -> Unit
+) {
+    val state = viewModel.uiState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchRecipes()
+    }
+
     Column(modifier = Modifier.fillMaxSize()) {
         Box(
             modifier = Modifier
@@ -135,8 +146,8 @@ fun RecipeCard(recipeName: String, recipeType: String) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun RecipeScreenPreview() {
-    RecipeScreen()
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun RecipeScreenPreview() {
+//    RecipeScreen()
+//}
