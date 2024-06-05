@@ -42,11 +42,12 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.sammy.paparadoorbell.R
+import com.sammy.paparadoorbell.SpoonacularNavigationActions
 
 @Composable
 fun RecipeScreen(
     viewModel: RecipeViewModel = hiltViewModel(),
-    onCharacterClick: (Int) -> Unit
+    onRecipeClick: (Int) -> Unit
 ) {
     val state = viewModel.uiState.collectAsState()
 
@@ -128,7 +129,7 @@ fun RecipeScreen(
                 columns = GridCells.Fixed(2), modifier = Modifier.fillMaxWidth()
             ) {
                 items(state.value.recipes.take(4)) { recipe ->
-                    RecipeCard(recipe.title, recipe.image)
+                    RecipeCard(recipe.id, recipe.title, recipe.image, onRecipeClick)
                 }
             }
         }
@@ -136,8 +137,8 @@ fun RecipeScreen(
 }
 
 @Composable
-fun RecipeCard(recipeName: String, recipeImage: String) {
-    Box(modifier = Modifier.padding(8.dp)) {
+fun RecipeCard(recipeId: Int, recipeName: String, recipeImage: String, onClick: (Int) -> Unit) {
+    Box(modifier = Modifier.padding(8.dp).clickable { onClick(recipeId) }) {
         Column {
             Image(
                 painter = rememberAsyncImagePainter(model = recipeImage),
@@ -148,6 +149,7 @@ fun RecipeCard(recipeName: String, recipeImage: String) {
         }
     }
 }
+
 
 //@Preview(showBackground = true)
 //@Composable

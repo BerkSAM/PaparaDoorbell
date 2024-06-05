@@ -6,7 +6,7 @@ import androidx.navigation.NavHostController
 object SpoonacularDestination {
     const val SPLASH = "splash"
     const val RECIPES = "recipes"
-    const val RECIPE_DETAIL = "recipe_detail/{id}"
+    const val RECIPE_DETAIL = "recipeDetail/{id}"
 }
 
 class SpoonacularNavigationActions(private val navController: NavHostController) {
@@ -20,7 +20,7 @@ class SpoonacularNavigationActions(private val navController: NavHostController)
     }
 
     fun navigateToRecipeDetail(id: Int) {
-        Log.v("SpoonacularNavigationActions", "navigateToCharacterDetail: $id")
+        Log.v("SpoonacularNavigationActions", "navigateToCDetail: $id")
         navController.navigate(
             SpoonacularDestination.RECIPE_DETAIL.replace("{id}", id.toString()),
         ) {

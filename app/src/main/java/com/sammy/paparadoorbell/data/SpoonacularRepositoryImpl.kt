@@ -36,5 +36,28 @@ class SpoonacularRepositoryImpl @Inject constructor(
         return recipesResponse
     }
 
+    override suspend fun getRecipesDetail(recipeId: Int): Flow<ApiResult<RecipesResponse>> {
+        val recipesResponse = networkDataSource.getRecipes()
+        recipesResponse.collect { value ->
+            when (value) {
+                is ApiResult.Success -> {
+                    value.data?.results?.forEach { recipe ->
+                        Log.d("SpoonacularRepository", "Recipe: ${recipe.title}")
+                    }
+                    localDataSource.insertRecipes(value.data?.toLocal().orEmpty())
+
+                }
+                is ApiResult.Error -> {
+                    Log.e("SpoonacularRepository", "Error: ${value.message}")
+                }
+                else -> {
+                    Log.d("SpoonacularRepository", "Recipe: ${value}")
+                }
+            }
+        }
+        return recipesResponse
+    }
+
+
 
 }

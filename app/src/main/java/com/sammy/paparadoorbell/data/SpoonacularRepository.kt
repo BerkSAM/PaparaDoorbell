@@ -6,5 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface SpoonacularRepository {
     suspend fun getRecipes(): Flow<ApiResult<RecipesResponse>>
+    suspend fun getRecipesDetail(recipeId: Int): Flow<ApiResult<RecipesResponse>>
 
 }
