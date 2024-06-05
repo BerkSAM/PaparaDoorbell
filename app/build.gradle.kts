@@ -75,6 +75,8 @@ dependencies {
     implementation(libs.converter.gson.v2110)
     //Okhttp
     implementation(libs.okHttp)
+    //Coil
+    implementation("io.coil-kt:coil-compose:2.6.0")
 
     implementation("com.google.dagger:hilt-android:2.49")
     ksp("com.google.dagger:hilt-compiler:2.49")

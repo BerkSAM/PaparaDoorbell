@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -39,6 +40,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.rememberAsyncImagePainter
 import com.sammy.paparadoorbell.R
 
 @Composable
@@ -125,8 +127,8 @@ fun RecipeScreen(
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2), modifier = Modifier.fillMaxWidth()
             ) {
-                items(4) { _ ->
-                    RecipeCard("Avocado Milkshake", "Drink")
+                items(state.value.recipes.take(4)) { recipe ->
+                    RecipeCard(recipe.title, recipe.image)
                 }
             }
         }
@@ -134,14 +136,15 @@ fun RecipeScreen(
 }
 
 @Composable
-fun RecipeCard(recipeName: String, recipeType: String) {
+fun RecipeCard(recipeName: String, recipeImage: String) {
     Box(modifier = Modifier.padding(8.dp)) {
         Column {
-            Box(modifier = Modifier.size(175.dp, 150.dp), contentAlignment = Alignment.Center) {
-                Text(text = "Image")
-            }
+            Image(
+                painter = rememberAsyncImagePainter(model = recipeImage),
+                contentDescription = "Recipe Image",
+                modifier = Modifier.size(175.dp, 150.dp)
+            )
             Text(text = recipeName)
-            Text(text = recipeType)
         }
     }
 }
