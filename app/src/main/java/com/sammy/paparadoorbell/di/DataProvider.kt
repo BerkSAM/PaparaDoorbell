@@ -49,8 +49,8 @@ object DatabasesModule {
         return Room.databaseBuilder(
             context.applicationContext,
             RecipesDatabase::class.java,
-            "characters_database.db"
-        ).build()
+            "recipe.db"
+        ).fallbackToDestructiveMigration().build()
     }
 }
 

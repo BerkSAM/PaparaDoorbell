@@ -1,6 +1,7 @@
 package com.sammy.paparadoorbell.data.source.network
 
 import com.sammy.paparadoorbell.data.source.network.response.recipes.RecipesResponse
+import com.sammy.paparadoorbell.data.source.network.response.recipesDetail.RecipeDetailResponse
 import com.sammy.paparadoorbell.utils.ApiResult
 import com.sammy.paparadoorbell.utils.apiFlow
 import kotlinx.coroutines.flow.Flow
@@ -13,7 +14,7 @@ class SpoonacularNetworkDataSource @Inject constructor(
         spoonacularApi.getRecipes()
     }
 
-    override suspend fun getRecipesDetail(recipeId: Int): Flow<ApiResult<RecipesResponse>> = apiFlow {
+    override suspend fun getRecipesDetail(recipeId: Int): Flow<ApiResult<RecipeDetailResponse>> = apiFlow {
         spoonacularApi.getRecipesDetail(recipeId)
     }
 

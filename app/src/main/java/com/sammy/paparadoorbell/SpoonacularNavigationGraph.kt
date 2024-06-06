@@ -57,7 +57,6 @@ fun SpoonacularNavigationGraph(
 
         composable("recipeDetail/{recipeId}") { backStackEntry ->
             val recipeId = backStackEntry.arguments?.getString("recipeId")?.toIntOrNull()
-            Log.v("SpoonacularNavigationGraph", "recipeId: $recipeId")
             if (recipeId != null) {
                 // Create a dummy LocalRecipes instance
                 val dummyRecipe = LocalRecipes(
@@ -66,7 +65,7 @@ fun SpoonacularNavigationGraph(
                     image = "https://via.placeholder.com/150"
                     // Add other properties as needed...
                 )
-                RecipeDetailScreen(recipe = dummyRecipe)
+                RecipeDetailScreen(recipe = dummyRecipe,recipeId = recipeId)
 
             }
         }

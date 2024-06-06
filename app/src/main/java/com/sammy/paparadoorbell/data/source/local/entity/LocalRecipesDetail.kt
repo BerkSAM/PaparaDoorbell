@@ -1,27 +1,22 @@
 package com.sammy.paparadoorbell.data.source.local.entity
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "recipeDetail")
 data class LocalRecipesDetail(
+    @PrimaryKey val id: Int?,
     val aggregateLikes: Int?,
-    val analyzedInstructions: List<AnalyzedInstruction?>?,
     val cheap: Boolean?,
-    val cookingMinutes: Any?,
     val creditsText: String?,
-    val cuisines: List<String?>?,
     val dairyFree: Boolean?,
-    val diets: List<String?>?,
-    val dishTypes: List<String?>?,
-    val extendedIngredients: List<ExtendedIngredient?>?,
     val gaps: String?,
     val glutenFree: Boolean?,
     val healthScore: Int?,
-    val id: Int?,
     val image: String?,
     val imageType: String?,
     val instructions: String?,
     val lowFodmap: Boolean?,
-    val occasions: List<Any?>?,
-    val originalId: Any?,
-    val preparationMinutes: Any?,
     val pricePerServing: Double?,
     val readyInMinutes: Int?,
     val servings: Int?,

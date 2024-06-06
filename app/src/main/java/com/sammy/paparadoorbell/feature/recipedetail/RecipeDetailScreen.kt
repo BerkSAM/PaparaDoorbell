@@ -10,22 +10,37 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.DrawModifier
 import androidx.compose.ui.graphics.drawscope.ContentDrawScope
 import androidx.compose.ui.graphics.drawscope.translate
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.sammy.paparadoorbell.data.source.local.entity.LocalRecipes
 
 @Composable
-fun RecipeDetailScreen(recipe: LocalRecipes) {
+fun RecipeDetailScreen(
+    recipe: LocalRecipes,
+    recipeId: Int,
+    viewModel: RecipeDetailViewModel = hiltViewModel()) {
+
+    val state = viewModel.uiState.collectAsState()
+    val ingredients = listOf("egg", "milk", "powder")
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchRecipeDetails(recipeId)
+    }
+
+
     val scrollState = rememberLazyListState()
     val parallaxFactor = 0.5f
 
@@ -56,7 +71,45 @@ fun RecipeDetailScreen(recipe: LocalRecipes) {
                 )
             }
 
-            // Add more items for other recipe details as needed...
+            item {
+                Text(
+                    text = "Type: cartCurt",
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+
+            item {
+                Text(
+                    text = "Ingredients",
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+
+            items(ingredients ?: emptyList()) { ingredient ->
+                Text(
+                    text = "- $ingredient",
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
+            }
+
+            item {
+                Text(
+                    text = "Instructions",
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+
+            item {
+                Text(
+                    text = "bla bla bla bla bla" ?: "",
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
         }
     }
 }
@@ -74,13 +127,11 @@ fun Modifier.parallaxEffect(scrollState: LazyListState, parallaxFactor: Float = 
 @Preview(showBackground = true)
 @Composable
 fun RecipeDetailScreenPreview() {
-    // Create a dummy LocalRecipes instance for preview
     val dummyRecipe = LocalRecipes(
         id = 1,
         title = "Dummy Recipe",
         image = "https://via.placeholder.com/150",
-        // Add other properties as needed...
     )
 
-    RecipeDetailScreen(recipe = dummyRecipe)
+    RecipeDetailScreen(recipe = dummyRecipe, recipeId = 1)
 }
