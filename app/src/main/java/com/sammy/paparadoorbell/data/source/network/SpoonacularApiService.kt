@@ -7,10 +7,10 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface SpoonacularApiService {
-    @GET("/recipes/complexSearch?apiKey=8d2d3c918120482ea0cdde614e6bd2df&offset=4&number=4")
+    @GET("/recipes/complexSearch?apiKey=a4eb230a10e24df7920ebec5c21fe006&offset=4&number=10")
     suspend fun getRecipes(): Response<RecipesResponse>
 
-    @GET("/recipes/{recipeId}/information?apiKey=8d2d3c918120482ea0cdde614e6bd2df")
+    @GET("/recipes/{recipeId}/information?apiKey=a4eb230a10e24df7920ebec5c21fe006")
     suspend fun getRecipesDetail(@Path("recipeId") recipeId: Int): Response<RecipeDetailResponse>
 
 

@@ -42,7 +42,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.sammy.paparadoorbell.R
-import com.sammy.paparadoorbell.SpoonacularNavigationActions
 
 @Composable
 fun RecipeScreen(
@@ -88,7 +87,7 @@ fun RecipeScreen(
                 Spacer(modifier = Modifier.height(100.dp))
                 TextField(value = "",
                     onValueChange = { },
-                    placeholder = { Text("Search",fontSize = 14.sp, color = Color.White) },
+                    placeholder = { Text("Search", fontSize = 14.sp, color = Color.White) },
                     modifier = Modifier
                         .height(IntrinsicSize.Min)
                         .size(350.dp, 50.dp)
@@ -101,7 +100,13 @@ fun RecipeScreen(
                         focusedIndicatorColor = Color(0xFFF4526A),
                         disabledIndicatorColor = Color(0xFFF4526A)
                     ),
-                    trailingIcon = { Icon(Icons.Filled.Search, contentDescription = "Search",tint = Color.White) })
+                    trailingIcon = {
+                        Icon(
+                            Icons.Filled.Search,
+                            contentDescription = "Search",
+                            tint = Color.White
+                        )
+                    })
             }
         }
 
@@ -126,9 +131,9 @@ fun RecipeScreen(
             }
 
             LazyVerticalGrid(
-                columns = GridCells.Fixed(2), modifier = Modifier.fillMaxWidth()
+                columns = GridCells.Fixed(2), modifier = Modifier.fillMaxWidth(),
             ) {
-                items(state.value.recipes.take(4)) { recipe ->
+                items(state.value.recipes.take(10)) { recipe ->
                     RecipeCard(recipe.id, recipe.title, recipe.image, onRecipeClick)
                 }
             }
@@ -138,12 +143,17 @@ fun RecipeScreen(
 
 @Composable
 fun RecipeCard(recipeId: Int, recipeName: String, recipeImage: String, onClick: (Int) -> Unit) {
-    Box(modifier = Modifier.padding(8.dp).clickable { onClick(recipeId) }) {
+    Box(modifier = Modifier
+        .padding(8.dp)
+        .clip(RoundedCornerShape(8.dp))
+        .clickable { onClick(recipeId) }) {
         Column {
             Image(
                 painter = rememberAsyncImagePainter(model = recipeImage),
                 contentDescription = "Recipe Image",
-                modifier = Modifier.size(175.dp, 150.dp)
+                modifier = Modifier
+                    .size(175.dp, 150.dp)
+                    .clip(RoundedCornerShape(16.dp)),
             )
             Text(text = recipeName)
         }
