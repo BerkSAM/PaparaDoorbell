@@ -1,6 +1,5 @@
 package com.sammy.paparadoorbell.feature.favoriterecipe
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -28,7 +27,6 @@ class FavoriteRecipeViewModel @Inject constructor(
     private suspend fun fetchFavoriteRecipes() {
         recipesDao.getRecipeFav().collect { localRecipesList ->
             _favoriteRecipes.postValue(localRecipesList)
-            Log.d("FavoriteRecipeViewModel", "Collected recipes: $localRecipesList")
         }
     }
 

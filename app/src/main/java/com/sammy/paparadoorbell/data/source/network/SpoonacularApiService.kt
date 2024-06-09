@@ -1,5 +1,6 @@
 package com.sammy.paparadoorbell.data.source.network
 
+import com.sammy.paparadoorbell.BuildConfig.API_KEY
 import com.sammy.paparadoorbell.data.source.network.response.recipes.RecipesResponse
 import com.sammy.paparadoorbell.data.source.network.response.recipesDetail.RecipeDetailResponse
 import retrofit2.Response
@@ -16,10 +17,8 @@ interface SpoonacularApiService {
         @Query("type") type: String
     ): Response<RecipesResponse>
 
-    @GET("/recipes/{recipeId}/information?apiKey=a25690519422419eabc6cc3a67b2b7e0")
+    @GET("/recipes/{recipeId}/information?apiKey=4dab836a00954713bcfc219594d2ad15")
     suspend fun getRecipesDetail(@Path("recipeId") recipeId: Int): Response<RecipeDetailResponse>
 
-    companion object {
-        const val API_KEY = "a25690519422419eabc6cc3a67b2b7e0"
-    }
+
 }

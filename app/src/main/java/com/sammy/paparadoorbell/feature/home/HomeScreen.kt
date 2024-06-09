@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,7 +24,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sammy.paparadoorbell.R
-import com.sammy.paparadoorbell.SpoonacularDestination
+import com.sammy.paparadoorbell.ui.theme.boldfont
+import com.sammy.paparadoorbell.ui.theme.mediumfont
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -49,9 +49,8 @@ fun HomeScreen(navRecipes: () -> Unit) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
                             text = "What do you want to cook today?",
-                            style = MaterialTheme.typography.titleLarge,
-                            fontSize = 44.sp,
-                            fontWeight = FontWeight.Bold,
+                            fontFamily = boldfont,
+                            fontSize = 33.sp,
                             color = Color.White,
                             lineHeight = 50.sp,
                             textAlign = TextAlign.Center
@@ -61,11 +60,12 @@ fun HomeScreen(navRecipes: () -> Unit) {
                             modifier = Modifier.padding(horizontal = 90.dp),
                             text = "Let's make a delicious dish with " +
                                     "the best recipe for you!",
-                            style = MaterialTheme.typography.titleSmall,
+
+                            fontFamily = mediumfont,
                             textAlign = TextAlign.Center,
                             color = Color.White
                         )
-                        Spacer(modifier = Modifier.height(75.dp))
+                        Spacer(modifier = Modifier.height(65.dp))
                         Button(
                             modifier = Modifier.size(250.dp, 50.dp), onClick = {
                                 navRecipes()

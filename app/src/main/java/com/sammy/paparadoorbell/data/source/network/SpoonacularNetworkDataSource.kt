@@ -1,6 +1,6 @@
 package com.sammy.paparadoorbell.data.source.network
 
-import com.sammy.paparadoorbell.data.source.network.SpoonacularApiService.Companion.API_KEY
+import com.sammy.paparadoorbell.BuildConfig.API_KEY
 import com.sammy.paparadoorbell.data.source.network.response.recipes.RecipesResponse
 import com.sammy.paparadoorbell.data.source.network.response.recipesDetail.RecipeDetailResponse
 import com.sammy.paparadoorbell.utils.ApiResult
