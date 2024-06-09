@@ -1,10 +1,7 @@
 package com.sammy.paparadoorbell.feature.recipe
 
 import android.annotation.SuppressLint
-import android.util.Log
-import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -24,7 +21,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -33,10 +29,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -56,15 +54,17 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.unit.times
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.sammy.paparadoorbell.R
 import com.sammy.paparadoorbell.SpoonacularNavigationActions
+import com.sammy.paparadoorbell.ui.theme.mediumfont
+import com.sammy.paparadoorbell.ui.theme.regularfont
+import com.sammy.paparadoorbell.ui.theme.semiboldfont
+import com.sammy.paparadoorbell.ui.theme.ubuntusans
 
 enum class Tab {
     HOME,
@@ -116,7 +116,7 @@ fun RecipeScreen(
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxSize()
-                        .clip(RoundedCornerShape(bottomStart = 115.dp, bottomEnd = 115.dp))
+                        .clip(RoundedCornerShape(bottomStart = 43.dp, bottomEnd = 43.dp))
                         .blur(radius = 5.dp)
                 )
 
@@ -126,10 +126,10 @@ fun RecipeScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        modifier = Modifier.padding(horizontal = 80.dp),
+                        modifier = Modifier.padding(horizontal = 60.dp),
                         text = "What do you want to cook today?",
                         fontSize = 28.sp,
-                        style = MaterialTheme.typography.titleMedium,
+                        fontFamily = semiboldfont,
                         textAlign = TextAlign.Center,
                         color = Color.White
                     )
@@ -146,33 +146,33 @@ fun RecipeScreen(
                     .padding(16.dp)
             ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .padding(bottom = 8.dp)
+                        .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
                         text = "${selectedCategory.value} Recipe",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold
+                        fontFamily = mediumfont,
+                        fontSize = 22.sp
                     )
 
-                    Text(text = "View All",
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFFF4526A),
-                        modifier = Modifier.clickable { /* Handle click */ })
+//                    Text(text = "View All",
+//                        fontSize = 16.sp,
+//                        fontWeight = FontWeight.Bold,
+//                        color = Color(0xFFF4526A),
+//                        modifier = Modifier.clickable { /* Handle click */ })
                 }
                 if (state.value.isLoading || state.value.isError) {
-                    Log.d("RecipeScreen", "Loading: $state.value.isLoading")
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(1),
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    items(10) { // Placeholder items for the shimmer effect
-                        ShimmerRecipeCardItem() // Use ShimmerRecipeCardItem composable
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(1),
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        items(10) {
+                            ShimmerRecipeCardItem()
+                        }
                     }
-                }
                 } else {
-                    Log.d("RecipeScreen", "Loading: $state.value.isLoading")
                     LazyVerticalGrid(
                         columns = GridCells.Fixed(1),
                         modifier = Modifier.fillMaxWidth(),
@@ -181,18 +181,21 @@ fun RecipeScreen(
                             RecipeCard(
                                 recipe.id,
                                 recipe.title,
-                               recipe.image,
+                                recipe.image,
                                 onRecipeClick,
-                                onFavoriteClick = { recipeId -> viewModel.markAsFavoriteRecipe(recipeId) }
+                                onFavoriteClick = { recipeId ->
+                                    viewModel.markAsFavoriteRecipe(
+                                        recipeId
+                                    )
+                                }
                             )
                         }
                     }
-               }
+                }
             }
         }
     }
 }
-
 
 
 @Composable
@@ -238,7 +241,8 @@ fun RecipeCard(
                         .padding(8.dp)
                         .align(Alignment.TopStart),
                     color = Color.Black,
-                    fontWeight = FontWeight.Bold
+                    fontFamily = ubuntusans,
+                    fontSize = 14.sp
                 )
             }
         }
@@ -248,15 +252,15 @@ fun RecipeCard(
 @Composable
 fun BottomBar(selectedTab: MutableState<Tab>, navActions: SpoonacularNavigationActions) {
     BottomNavigation(
-        backgroundColor = Color.LightGray,
-        contentColor = Color(0xFFF4526A)
+        backgroundColor = Color(0xFFF4526A),
+        contentColor = Color.White
     ) {
         BottomNavigationItem(
             icon = {
                 Icon(
                     painterResource(id = R.drawable.home),
                     contentDescription = "Home",
-                    tint = Color(0xFFF4526A)
+                    tint = Color.White
                 )
             },
             selected = selectedTab.value == Tab.HOME,
@@ -267,7 +271,7 @@ fun BottomBar(selectedTab: MutableState<Tab>, navActions: SpoonacularNavigationA
                 Icon(
                     painterResource(id = R.drawable.fav),
                     contentDescription = "Favorite",
-                    tint = Color(0xFFF4526A)
+                    tint = Color.White
                 )
             },
             selected = selectedTab.value == Tab.FAVORITE,
@@ -279,36 +283,99 @@ fun BottomBar(selectedTab: MutableState<Tab>, navActions: SpoonacularNavigationA
     }
 }
 
+//@Composable
+//fun CategoryButtons(onCategorySelected: (String) -> Unit) {
+//    val categories = listOf("Dessert", "Breakfast", "Salad", "Beverage", "Snack")
+//    Row(
+//        modifier = Modifier
+//            .padding(start = 80.dp, end = 80.dp, bottom = 8.dp)
+//            .horizontalScroll(rememberScrollState()),
+//        horizontalArrangement = Arrangement.SpaceEvenly
+//    ) {
+//        categories.forEachIndexed { index, category ->
+//            if (index != 0) {
+//                Spacer(modifier = Modifier.width(8.dp))
+//            }
+//            Button(
+//                onClick = {
+//                    onCategorySelected(category)
+//                },
+//                colors = ButtonDefaults.buttonColors(
+//                    containerColor = Color(0xFFF4526A),
+//                    contentColor = Color.White
+//                )
+//            ) {
+//                Text(
+//                    text = category,
+//                    fontFamily = regularfont
+//                )
+//            }
+//        }
+//    }
+//}
+
 @Composable
 fun CategoryButtons(onCategorySelected: (String) -> Unit) {
     val categories = listOf("Dessert", "Breakfast", "Salad", "Beverage", "Snack")
-    Row(
+    val scrollState = rememberScrollState()
+
+    Box(
         modifier = Modifier
-            .padding(start = 86.dp, end = 86.dp)
-            .horizontalScroll(rememberScrollState()),
-        horizontalArrangement = Arrangement.SpaceEvenly
+            .padding(bottom = 8.dp)
     ) {
-        categories.forEachIndexed { index, category ->
-            if (index != 0) {
-                Spacer(modifier = Modifier.width(8.dp))
+        // Sol Ok
+        if (scrollState.value > 0) {
+            Icon(
+                imageVector = Icons.Default.ArrowBack,
+                contentDescription = "Scroll Left",
+                modifier = Modifier
+                    .align(Alignment.CenterStart)
+                    .padding(start = 56.dp),
+                tint = Color.White
+
+            )
+        }
+
+        Row(
+            modifier = Modifier
+                .padding(horizontal = 81.dp)
+                .horizontalScroll(scrollState),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            categories.forEachIndexed { index, category ->
+                if (index != 0) {
+                    Spacer(modifier = Modifier.width(8.dp))
+                }
+                Button(
+                    onClick = {
+                        onCategorySelected(category)
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFF4526A),
+                        contentColor = Color.White
+                    )
+                ) {
+                    Text(
+                        text = category,
+                        fontFamily = regularfont
+                    )
+                }
             }
-            Button(
-                onClick = {
-                    onCategorySelected(category)
-                },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFF4526A),
-                    contentColor = Color.White
-                )
-            ) {
-                Text(text = category)
-            }
+        }
+
+        // Sağ Ok
+        if (scrollState.value < scrollState.maxValue) {
+            Icon(
+                imageVector = Icons.Default.ArrowForward,
+                contentDescription = "Scroll Right",
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .padding(end = 56.dp),
+                tint = Color.White
+            )
         }
     }
 }
-
-
-
 
 @Composable
 fun ShimmerRecipeCardItem() {
@@ -325,7 +392,7 @@ fun ShimmerRecipeCardItem() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(150.dp)
-                    .shimmerEffect() // Apply shimmer effect to the image placeholder
+                    .shimmerEffect()
             )
             Box(
                 modifier = Modifier

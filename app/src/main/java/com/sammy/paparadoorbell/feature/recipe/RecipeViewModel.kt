@@ -1,6 +1,5 @@
 package com.sammy.paparadoorbell.feature.recipe
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -56,7 +55,6 @@ class RecipeViewModel @Inject constructor(
 
                 is ApiResult.Error -> {
                     _uiState.update { it.copy(isLoading = false, isError = true) }
-                    Log.e("HomeViewModel", "Error fetching recipes: vallahi error")
                 }
             }
         }
@@ -64,8 +62,6 @@ class RecipeViewModel @Inject constructor(
 
     suspend fun fetchFavoriteRecipes() {
         val response = recipesDao.getRecipeFav()
-        Log.d("HomeViewModel", "Favorite recipes: $response")
-
     }
 
     fun markAsFavoriteRecipe(recipeId: Int) {

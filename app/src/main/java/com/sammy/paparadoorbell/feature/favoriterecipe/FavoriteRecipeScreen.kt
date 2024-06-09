@@ -39,11 +39,12 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
+import com.sammy.paparadoorbell.ui.theme.regularfont
+import com.sammy.paparadoorbell.ui.theme.ubuntusans
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -96,7 +97,6 @@ fun FavoriteRecipeScreen(
 @Composable
 fun CustomRecipeCard(id: Int, image: String?, name: String?, instruction: String?, viewModel: FavoriteRecipeViewModel) {
     var expanded by remember { mutableStateOf(false) }
-    var isFavorite by remember { mutableStateOf(false) } // State for favorite status
 
     Box(
         modifier = Modifier
@@ -124,7 +124,6 @@ fun CustomRecipeCard(id: Int, image: String?, name: String?, instruction: String
                         contentScale = ContentScale.Crop
                     )
 
-                    // Favorite Icon Overlay
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
@@ -153,10 +152,10 @@ fun CustomRecipeCard(id: Int, image: String?, name: String?, instruction: String
                 Text(
                     text = name ?: "",
                     modifier = Modifier
-                        .padding(8.dp)
+                        .padding(start = 14.dp, top = 8.dp, end = 8.dp, bottom = 8.dp)
                         .align(Alignment.TopStart),
                     color = Color.Black,
-                    fontWeight = FontWeight.Bold
+                    fontFamily = ubuntusans
                 )
             }
             if (expanded) {
@@ -166,7 +165,8 @@ fun CustomRecipeCard(id: Int, image: String?, name: String?, instruction: String
                     style = TextStyle(
                         fontSize = 14.sp
                     ),
-                    modifier = Modifier.padding(8.dp)
+                    modifier = Modifier.padding(14.dp),
+                    fontFamily = regularfont
                 )
             }
         }

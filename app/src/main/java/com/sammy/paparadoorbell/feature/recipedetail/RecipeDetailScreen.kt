@@ -2,13 +2,17 @@ package com.sammy.paparadoorbell.feature.recipedetail
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -33,8 +37,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
+import com.sammy.paparadoorbell.ui.theme.mediumfont
+import com.sammy.paparadoorbell.ui.theme.regularfont
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -111,20 +118,29 @@ fun RecipeDetailScreen(
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = "${state.value.recipe?.readyInMinutes} Minutes - ${state.value.recipe?.servings} Serving",
-                        style = MaterialTheme.typography.bodySmall,
+                        fontSize = 12.sp,
+                        fontFamily = regularfont,
                         color = MaterialTheme.colorScheme.onBackground
                     )
                 }
             }
 
             item {
-                IngredientList(state.value.recipe?.extendedIngredients)
+                Column(Modifier.padding(16.dp)) {
+                    Text(
+                        text = "Ingredients",
+                        fontFamily = mediumfont,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+                    IngredientList(state.value.recipe?.extendedIngredients)
+                }
             }
 
             item {
                 Text(
                     text = "Instructions",
-                    style = MaterialTheme.typography.headlineSmall,
+                    fontFamily = mediumfont,
                     color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 16.dp)
                 )
@@ -155,7 +171,8 @@ fun InstructionsCard(instructions: String) {
     ) {
         Text(
             text = instructions,
-            style = MaterialTheme.typography.bodyMedium,
+            fontSize = 12.sp,
+            fontFamily = regularfont,
             modifier = Modifier.padding(16.dp)
         )
     }
@@ -185,14 +202,31 @@ fun RecipeImageHeader(imageUrl: String?) {
 
 @Composable
 fun IngredientList(ingredients: List<com.sammy.paparadoorbell.data.source.network.response.recipesDetail.ExtendedIngredient?>?) {
-    Column(Modifier.padding(16.dp)) {
-        ingredients?.forEach { ingredient ->
-            if (ingredient != null) {
-                Text(
-                    text = "- ${ingredient.original}",
-                    style = MaterialTheme.typography.bodySmall
-                )
+    Column(Modifier.padding(8.dp)) {
+        ingredients?.chunked(3)?.forEach { rowIngredients -> // Adjust the chunk size based on how many items you want per row
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp) // Add spacing between items
+            ) {
+                rowIngredients.forEach { ingredient ->
+                    if (ingredient != null) {
+                        Box(
+                            modifier = Modifier
+                                .size(110.dp, 150.dp) // Set the fixed size with height of 130.dp
+                                .background(MaterialTheme.colorScheme.surfaceVariant, shape = RoundedCornerShape(8.dp))
+                                .padding(8.dp)
+                        ) {
+                            Text(
+                                text = "- ${ingredient.original}",
+                                fontFamily = regularfont,
+                                fontSize = 12.sp,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                }
             }
+            Spacer(modifier = Modifier.height(8.dp)) // Add vertical spacing between rows
         }
     }
 }

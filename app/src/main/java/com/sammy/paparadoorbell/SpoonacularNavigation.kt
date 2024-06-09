@@ -1,6 +1,6 @@
 package com.sammy.paparadoorbell
 
-import android.util.Log
+
 import androidx.navigation.NavHostController
 
 object SpoonacularDestination {
@@ -40,7 +40,6 @@ class SpoonacularNavigationActions(private val navController: NavHostController)
     }
 
     fun navigateToRecipeDetail(id: Int) {
-        Log.v("SpoonacularNavigationActions", "navigateToCDetail: $id")
         navController.navigate(
             SpoonacularDestination.RECIPE_DETAIL.replace("{id}", id.toString()),
         ) {
