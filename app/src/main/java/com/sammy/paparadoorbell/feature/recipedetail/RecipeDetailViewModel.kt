@@ -11,6 +11,7 @@ import com.sammy.paparadoorbell.utils.ApiResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,6 +20,7 @@ data class RecipeDetailState(
     val isLoading: Boolean = false,
     val isError: Boolean = false,
     val recipe: RecipeDetailResponse? = null,
+    val isFav: Boolean = false,
 
 )
 
@@ -29,7 +31,7 @@ class RecipeDetailViewModel @Inject constructor(
     private val recipesDao: RecipesDao,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(RecipeDetailState())
+    val _uiState = MutableStateFlow(RecipeDetailState())
     val uiState: StateFlow<RecipeDetailState> = _uiState
 
     suspend fun fetchRecipeDetails(recipeId: Int) {
@@ -41,9 +43,14 @@ class RecipeDetailViewModel @Inject constructor(
                         _uiState.value = RecipeDetailState(isLoading = true)
                     }
                     is ApiResult.Success -> {
+                        var isFavorite = false
+                        recipesDao.getRecipeDetailById(recipeId).take(1).collect { localRecipeDetail ->
+                            isFavorite = localRecipeDetail.isFav
+                        }
                         _uiState.value = RecipeDetailState(
                             isLoading = false,
-                            recipe = result.data
+                            recipe = result.data,
+                            isFav = isFavorite,
                         )
                     }
                     is ApiResult.Error -> {
@@ -61,6 +68,12 @@ class RecipeDetailViewModel @Inject constructor(
     fun markAsFavorite(recipeId: Int) {
         viewModelScope.launch {
             recipesDao.markAsFavorite(recipeId)
+        }
+    }
+
+    fun markAsUnFavorite(recipeId: Int) {
+        viewModelScope.launch {
+            recipesDao.markAsUnFavorite(recipeId)
         }
     }
 }

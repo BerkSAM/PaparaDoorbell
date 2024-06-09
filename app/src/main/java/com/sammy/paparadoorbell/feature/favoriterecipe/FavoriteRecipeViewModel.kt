@@ -33,7 +33,9 @@ class FavoriteRecipeViewModel @Inject constructor(
     }
 
 
-    fun markAsFavoriteRecipe(recipeId: Int) {
-        // Implement the logic to mark a recipe as favorite
+    fun markAsUnFavorite(recipeId: Int) {
+        viewModelScope.launch {
+            recipesDao.markAsUnFavorite(recipeId)
+        }
     }
 }

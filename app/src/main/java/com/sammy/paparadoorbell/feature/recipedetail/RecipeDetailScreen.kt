@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -41,10 +42,12 @@ fun RecipeDetailScreen(
     recipeId: Int,
     navBack: () -> Unit,
     onFavoriteClick: () -> Unit,
+    onUnFavoriteClick: () -> Unit,
     viewModel: RecipeDetailViewModel = hiltViewModel()
 ) {
     val state = viewModel.uiState.collectAsState()
-    LaunchedEffect(Unit) {
+
+    LaunchedEffect(recipeId) {
         viewModel.fetchRecipeDetails(recipeId)
     }
     val scrollState = rememberLazyListState()
@@ -68,8 +71,20 @@ fun RecipeDetailScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { onFavoriteClick() }) {
-                        Icon(Icons.Filled.FavoriteBorder, contentDescription = "Favorite", tint = MaterialTheme.colorScheme.onSurface)
+                    IconButton(onClick = {
+                        if (state.value.isFav) {
+                            onUnFavoriteClick()
+                            viewModel._uiState.value = state.value.copy(isFav = false)
+                        } else {
+                            onFavoriteClick()
+                            viewModel._uiState.value = state.value.copy(isFav = true)
+                        }
+                    }) {
+                        Icon(
+                            imageVector = if (state.value.isFav) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                            contentDescription = "Favorite",
+                            tint = if (state.value.isFav) Color.Red else MaterialTheme.colorScheme.onSurface
+                        )
                     }
                 }
             )
@@ -80,13 +95,12 @@ fun RecipeDetailScreen(
                 .fillMaxSize()
                 .padding(innerPadding),
             state = scrollState,
-            contentPadding = PaddingValues(bottom = 100.dp) // Add padding to the bottom
+            contentPadding = PaddingValues(bottom = 100.dp)
         ) {
             item {
                 RecipeImageHeader(state.value.recipe?.image)
-            }
 
-            // Title and Serving Information
+            }
             item {
                 Column(Modifier.padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 16.dp)) {
                     Text(
