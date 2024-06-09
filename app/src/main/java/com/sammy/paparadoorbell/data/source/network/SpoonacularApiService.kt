@@ -16,10 +16,10 @@ interface SpoonacularApiService {
         @Query("type") type: String
     ): Response<RecipesResponse>
 
-    @GET("/recipes/{recipeId}/information?apiKey=a4eb230a10e24df7920ebec5c21fe006")
+    @GET("/recipes/{recipeId}/information?apiKey=a25690519422419eabc6cc3a67b2b7e0")
     suspend fun getRecipesDetail(@Path("recipeId") recipeId: Int): Response<RecipeDetailResponse>
 
     companion object {
-        const val API_KEY = "a4eb230a10e24df7920ebec5c21fe006"
+        const val API_KEY = "a25690519422419eabc6cc3a67b2b7e0"
     }
 }

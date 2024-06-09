@@ -80,7 +80,8 @@ fun SpoonacularNavigationGraph(
                 RecipeDetailScreen(
                     recipeId = recipeId,
                     navBack = { navActions.navigateToRecipe() },
-                    onFavoriteClick = { viewModel.markAsFavorite(recipeId) } // Add this line
+                    onFavoriteClick = { viewModel.markAsFavorite(recipeId) },
+                    onUnFavoriteClick = { viewModel.markAsUnFavorite(recipeId) }
                 )
             }
         }

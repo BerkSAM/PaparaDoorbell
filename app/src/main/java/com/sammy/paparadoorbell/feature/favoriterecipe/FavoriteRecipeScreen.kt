@@ -13,11 +13,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -81,6 +83,7 @@ fun FavoriteRecipeScreen(
                                 image = recipes[index].image,
                                 name = recipes[index].title,
                                 instruction = recipes[index].instructions,
+                                viewModel = viewModel
                             )
                         }
                     }
@@ -91,8 +94,9 @@ fun FavoriteRecipeScreen(
 }
 
 @Composable
-fun CustomRecipeCard(id: Int, image: String?, name: String?, instruction: String?) {
+fun CustomRecipeCard(id: Int, image: String?, name: String?, instruction: String?, viewModel: FavoriteRecipeViewModel) {
     var expanded by remember { mutableStateOf(false) }
+    var isFavorite by remember { mutableStateOf(false) } // State for favorite status
 
     Box(
         modifier = Modifier
@@ -119,6 +123,26 @@ fun CustomRecipeCard(id: Int, image: String?, name: String?, instruction: String
                             .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)),
                         contentScale = ContentScale.Crop
                     )
+
+                    // Favorite Icon Overlay
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(8.dp)
+                            .align(Alignment.TopEnd)
+                    ) {
+                        Icon(
+                            imageVector =  Icons.Filled.Favorite,
+                            contentDescription = "Remove from favorites" ,
+                            modifier = Modifier
+                                .size(24.dp)
+                                .align(Alignment.TopEnd)
+                                .clickable {
+                                    viewModel.markAsUnFavorite(id)
+                                },
+                            tint = Color.Red
+                        )
+                    }
                 }
             }
             Box(

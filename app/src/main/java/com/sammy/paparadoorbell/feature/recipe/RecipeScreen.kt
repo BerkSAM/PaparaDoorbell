@@ -1,6 +1,15 @@
 package com.sammy.paparadoorbell.feature.recipe
 
 import android.annotation.SuppressLint
+import android.util.Log
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,6 +24,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -37,9 +47,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -47,6 +60,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.times
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.sammy.paparadoorbell.R
@@ -65,6 +79,7 @@ fun RecipeScreen(
     onRecipeClick: (Int) -> Unit,
 ) {
     val state = viewModel.uiState.collectAsState()
+
     val selectedTab = remember { mutableStateOf(Tab.HOME) }
     val selectedCategory = remember { mutableStateOf("Dessert") }
 
@@ -78,6 +93,8 @@ fun RecipeScreen(
     LaunchedEffect(selectedCategory.value) {
         viewModel.fetchRecipes(selectedCategory.value)
     }
+
+
     Scaffold(
         //modifier = Modifier.statusBarsPadding(),
         bottomBar = { BottomBar(selectedTab, navActions) }
@@ -144,24 +161,39 @@ fun RecipeScreen(
                         color = Color(0xFFF4526A),
                         modifier = Modifier.clickable { /* Handle click */ })
                 }
-
+                if (state.value.isLoading || state.value.isError) {
+                    Log.d("RecipeScreen", "Loading: $state.value.isLoading")
                 LazyVerticalGrid(
-                    columns = GridCells.Fixed(1), modifier = Modifier.fillMaxWidth(),
+                    columns = GridCells.Fixed(1),
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
-                    items(state.value.recipes.take(10)) { recipe ->
-                        RecipeCard(
-                            recipe.id,
-                            recipe.title,
-                            recipe.image,
-                            onRecipeClick,
-                            onFavoriteClick = { recipeId -> viewModel.markAsFavoriteRecipe(recipeId) }
-                        )
+                    items(10) { // Placeholder items for the shimmer effect
+                        ShimmerRecipeCardItem() // Use ShimmerRecipeCardItem composable
                     }
                 }
+                } else {
+                    Log.d("RecipeScreen", "Loading: $state.value.isLoading")
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(1),
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        items(state.value.recipes.take(10)) { recipe ->
+                            RecipeCard(
+                                recipe.id,
+                                recipe.title,
+                               recipe.image,
+                                onRecipeClick,
+                                onFavoriteClick = { recipeId -> viewModel.markAsFavoriteRecipe(recipeId) }
+                            )
+                        }
+                    }
+               }
             }
         }
     }
 }
+
+
 
 @Composable
 fun RecipeCard(
@@ -273,4 +305,63 @@ fun CategoryButtons(onCategorySelected: (String) -> Unit) {
             }
         }
     }
+}
+
+
+
+
+@Composable
+fun ShimmerRecipeCardItem() {
+    Box(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth()
+            .shadow(8.dp, RoundedCornerShape(16.dp), clip = false)
+            .clip(RoundedCornerShape(16.dp))
+            .background(Color.White)
+    ) {
+        Column {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(150.dp)
+                    .shimmerEffect() // Apply shimmer effect to the image placeholder
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.White)
+                    .padding(8.dp)
+                    .shimmerEffect() // Apply shimmer effect to the text placeholder
+            )
+        }
+    }
+}
+
+@Composable
+fun Modifier.shimmerEffect(): Modifier = composed {
+    val transition = rememberInfiniteTransition()
+    val translateAnim = transition.animateFloat(
+        initialValue = 0f,
+        targetValue = 1000f,
+        animationSpec = infiniteRepeatable(
+            tween(durationMillis = 1200, easing = FastOutSlowInEasing),
+            RepeatMode.Restart
+        )
+    )
+
+    // Return a modifier that applies the brush
+    this.then(
+        Modifier.background(
+            Brush.linearGradient(
+                colors = listOf(
+                    Color.LightGray.copy(alpha = 0.9f), // Use alpha for better visibility
+                    Color.LightGray.copy(alpha = 0.2f),
+                    Color.LightGray.copy(alpha = 0.9f)
+                ),
+                start = Offset(10f, 10f),
+                end = Offset(translateAnim.value, translateAnim.value)
+            )
+        )
+    )
 }

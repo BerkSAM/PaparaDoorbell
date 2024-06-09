@@ -32,12 +32,15 @@ interface RecipesDao {
     fun getRecipeFav(): Flow<List<LocalRecipesDetail>>
 
     // get local recipe detail data
-    @Query("SELECT * FROM recipeDetail WHERE id = :id")
+    @Query("SELECT isFav FROM recipeDetail WHERE id = :id")
     fun getRecipeDetailById(id: Int): Flow<LocalRecipesDetail>
 
     @Query("UPDATE recipeDetail SET isFav = 1 WHERE id = :recipeId")
     suspend fun markAsFavorite(recipeId: Int)
 
-    @Query("UPDATE recipeDetail SET isFav = 1 WHERE id = :recipeId")
+    @Query("UPDATE recipeDetail SET isFav = 0 WHERE id = :recipeId")
+    suspend fun markAsUnFavorite(recipeId: Int)
+
+    @Query("UPDATE recipeDetail SET isFav = 0 WHERE id = :recipeId")
     suspend fun markAsFavoriteRecipe(recipeId: Int)
 }
