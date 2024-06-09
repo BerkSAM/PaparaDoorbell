@@ -12,11 +12,11 @@ import kotlinx.coroutines.flow.Flow
 interface RecipesDao {
 
     // insert many
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertRecipes(recipes: List<LocalRecipes>)
 
     // insert one
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertRecipeDetail(recipeDetail: LocalRecipesDetail)
 
     // observe all
@@ -27,7 +27,17 @@ interface RecipesDao {
     @Query("SELECT * FROM recipes WHERE id = :id")
     fun getRecipeById(id: Int): Flow<LocalRecipes>
 
+    // get local fav data
+    @Query("SELECT * FROM recipeDetail WHERE isFav = 1")
+    fun getRecipeFav(): Flow<List<LocalRecipesDetail>>
+
     // get local recipe detail data
     @Query("SELECT * FROM recipeDetail WHERE id = :id")
     fun getRecipeDetailById(id: Int): Flow<LocalRecipesDetail>
+
+    @Query("UPDATE recipeDetail SET isFav = 1 WHERE id = :recipeId")
+    suspend fun markAsFavorite(recipeId: Int)
+
+    @Query("UPDATE recipeDetail SET isFav = 1 WHERE id = :recipeId")
+    suspend fun markAsFavoriteRecipe(recipeId: Int)
 }

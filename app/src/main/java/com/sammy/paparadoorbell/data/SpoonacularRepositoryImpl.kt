@@ -16,8 +16,8 @@ class SpoonacularRepositoryImpl @Inject constructor(
     private val localDataSource: RecipesDao
 ) : SpoonacularRepository {
 
-    override suspend fun getRecipes(): Flow<ApiResult<RecipesResponse>> {
-        val recipesResponse = networkDataSource.getRecipes()
+    override suspend fun getRecipes(type:String): Flow<ApiResult<RecipesResponse>> {
+        val recipesResponse = networkDataSource.getRecipes(type)
         recipesResponse.collect { value ->
             when (value) {
                 is ApiResult.Success -> {

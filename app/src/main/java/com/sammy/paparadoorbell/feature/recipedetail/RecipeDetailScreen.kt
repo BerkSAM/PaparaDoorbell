@@ -29,7 +29,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -41,6 +40,7 @@ import coil.compose.rememberAsyncImagePainter
 fun RecipeDetailScreen(
     recipeId: Int,
     navBack: () -> Unit,
+    onFavoriteClick: () -> Unit,
     viewModel: RecipeDetailViewModel = hiltViewModel()
 ) {
     val state = viewModel.uiState.collectAsState()
@@ -68,7 +68,7 @@ fun RecipeDetailScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { /* Handle favorite action */ }) {
+                    IconButton(onClick = { onFavoriteClick() }) {
                         Icon(Icons.Filled.FavoriteBorder, contentDescription = "Favorite", tint = MaterialTheme.colorScheme.onSurface)
                     }
                 }

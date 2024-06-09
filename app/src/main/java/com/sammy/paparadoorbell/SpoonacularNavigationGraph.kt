@@ -5,15 +5,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.sammy.paparadoorbell.data.source.local.entity.LocalRecipes
+import com.sammy.paparadoorbell.feature.favoriterecipe.FavoriteRecipeScreen
 import com.sammy.paparadoorbell.feature.home.HomeScreen
 import com.sammy.paparadoorbell.feature.recipe.RecipeScreen
 import com.sammy.paparadoorbell.feature.recipedetail.RecipeDetailScreen
+import com.sammy.paparadoorbell.feature.recipedetail.RecipeDetailViewModel
 import com.sammy.paparadoorbell.feature.splash.SplashScreen
 import kotlinx.coroutines.CoroutineScope
 
@@ -50,7 +52,7 @@ fun SpoonacularNavigationGraph(
         composable(
             route = SpoonacularDestination.RECIPES
         ) {
-            RecipeScreen {
+            RecipeScreen(navActions) {
                 navActions.navigateToRecipeDetail(it)
             }
         }
@@ -63,10 +65,23 @@ fun SpoonacularNavigationGraph(
             }
         }
 
+        composable(
+            route = SpoonacularDestination.FAVORITE_RECIPE
+        ) {
+            FavoriteRecipeScreen() {
+                navActions.navigateToRecipe()
+            }
+        }
+
         composable("recipeDetail/{recipeId}") { backStackEntry ->
             val recipeId = backStackEntry.arguments?.getString("recipeId")?.toIntOrNull()
             if (recipeId != null) {
-                RecipeDetailScreen(recipeId = recipeId,navBack = { navActions.navigateToRecipe() })
+                val viewModel: RecipeDetailViewModel = hiltViewModel()
+                RecipeDetailScreen(
+                    recipeId = recipeId,
+                    navBack = { navActions.navigateToRecipe() },
+                    onFavoriteClick = { viewModel.markAsFavorite(recipeId) } // Add this line
+                )
             }
         }
 

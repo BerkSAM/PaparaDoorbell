@@ -75,5 +75,7 @@ data class RecipeDetailResponse(
     @SerializedName("veryPopular")
     val veryPopular: Boolean?,
     @SerializedName("weightWatcherSmartPoints")
-    val weightWatcherSmartPoints: Int?
+    val weightWatcherSmartPoints: Int?,
+    @SerializedName("isFav")
+    val isFav: Int?
 )

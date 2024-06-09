@@ -7,5 +7,6 @@ import androidx.room.PrimaryKey
 data class LocalRecipes(
     @PrimaryKey val id: Int?,
     var image: String?,
-    var title: String?
+    var title: String?,
+    val isFav: Boolean = false
 )

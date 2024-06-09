@@ -8,6 +8,7 @@ object SpoonacularDestination {
     const val SPLASH = "splash"
     const val RECIPES = "recipes"
     const val RECIPE_DETAIL = "recipeDetail/{id}"
+    const val FAVORITE_RECIPE = "favoriterecipe"
 }
 
 class SpoonacularNavigationActions(private val navController: NavHostController) {
@@ -29,6 +30,15 @@ class SpoonacularNavigationActions(private val navController: NavHostController)
         }
     }
 
+    fun navigateToFavoriteRecipe() {
+        navController.navigate(SpoonacularDestination.FAVORITE_RECIPE) {
+            popUpTo(SpoonacularDestination.RECIPES) {
+                inclusive = true
+                saveState = true
+            }
+        }
+    }
+
     fun navigateToRecipeDetail(id: Int) {
         Log.v("SpoonacularNavigationActions", "navigateToCDetail: $id")
         navController.navigate(
@@ -39,4 +49,5 @@ class SpoonacularNavigationActions(private val navController: NavHostController)
             }
         }
     }
+
 }
