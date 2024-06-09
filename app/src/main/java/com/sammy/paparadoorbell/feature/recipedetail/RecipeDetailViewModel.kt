@@ -5,7 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sammy.paparadoorbell.data.SpoonacularRepository
-import com.sammy.paparadoorbell.data.source.network.response.recipes.RecipesResponse
+import com.sammy.paparadoorbell.data.source.local.RecipesDao
 import com.sammy.paparadoorbell.data.source.network.response.recipesDetail.RecipeDetailResponse
 import com.sammy.paparadoorbell.utils.ApiResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,13 +18,15 @@ import javax.inject.Inject
 data class RecipeDetailState(
     val isLoading: Boolean = false,
     val isError: Boolean = false,
-    val recipe: RecipeDetailResponse? = null
+    val recipe: RecipeDetailResponse? = null,
+
 )
 
 @HiltViewModel
 class RecipeDetailViewModel @Inject constructor(
     private val repository: SpoonacularRepository,
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
+    private val recipesDao: RecipesDao,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(RecipeDetailState())
@@ -53,6 +55,12 @@ class RecipeDetailViewModel @Inject constructor(
                     }
                 }
             }
+        }
+    }
+
+    fun markAsFavorite(recipeId: Int) {
+        viewModelScope.launch {
+            recipesDao.markAsFavorite(recipeId)
         }
     }
 }

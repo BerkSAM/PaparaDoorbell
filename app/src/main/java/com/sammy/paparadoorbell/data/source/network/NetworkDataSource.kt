@@ -7,6 +7,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface NetworkDataSource {
 
-    suspend fun getRecipes(): Flow<ApiResult<RecipesResponse>>
+    suspend fun getRecipes(type:String): Flow<ApiResult<RecipesResponse>>
     suspend fun getRecipesDetail(recipeId: Int): Flow<ApiResult<RecipeDetailResponse>>
 }

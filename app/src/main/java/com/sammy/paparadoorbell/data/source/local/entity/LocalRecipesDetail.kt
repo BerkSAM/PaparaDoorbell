@@ -31,5 +31,6 @@ data class LocalRecipesDetail(
     val vegetarian: Boolean?,
     val veryHealthy: Boolean?,
     val veryPopular: Boolean?,
-    val weightWatcherSmartPoints: Int?
+    val weightWatcherSmartPoints: Int?,
+    val isFav: Boolean = false
 )

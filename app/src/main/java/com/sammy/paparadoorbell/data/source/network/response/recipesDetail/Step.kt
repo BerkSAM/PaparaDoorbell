@@ -2,6 +2,7 @@ package com.sammy.paparadoorbell.data.source.network.response.recipesDetail
 
 
 import com.google.gson.annotations.SerializedName
+import com.sammy.paparadoorbell.data.source.local.entity.Ingredient
 
 data class Step(
     @SerializedName("equipment")

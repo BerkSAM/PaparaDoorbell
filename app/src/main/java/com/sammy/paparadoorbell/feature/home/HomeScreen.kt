@@ -22,16 +22,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sammy.paparadoorbell.R
+import com.sammy.paparadoorbell.SpoonacularDestination
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun HomeScreen() {
-     Scaffold {
+fun HomeScreen(navRecipes: () -> Unit) {
+    Scaffold {
         BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
             val halfHeight = this.maxHeight / 2
             Image(
@@ -66,8 +66,12 @@ fun HomeScreen() {
                             color = Color.White
                         )
                         Spacer(modifier = Modifier.height(75.dp))
-                        Button(modifier = Modifier.size(250.dp, 50.dp), onClick = { /* Handle click */ },
-                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFF4526A))) {
+                        Button(
+                            modifier = Modifier.size(250.dp, 50.dp), onClick = {
+                                navRecipes()
+                            },
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFF4526A))
+                        ) {
                             Text(fontSize = 20.sp, fontWeight = FontWeight.Bold, text = "Start")
                         }
                     }
@@ -75,10 +79,4 @@ fun HomeScreen() {
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun HomeScreenPreview() {
-    HomeScreen()
 }

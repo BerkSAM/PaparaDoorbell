@@ -8,7 +8,7 @@ import com.sammy.paparadoorbell.data.source.local.entity.LocalRecipesDetail
 
 @Database(
     entities = [LocalRecipes::class, LocalRecipesDetail::class],
-    version = 2,
+    version = 4,
     exportSchema = false,
 )
 abstract class RecipesDatabase : RoomDatabase() {
