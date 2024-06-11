@@ -1,6 +1,7 @@
 package com.sammy.paparadoorbell.feature.recipe
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -67,8 +68,10 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -253,7 +256,11 @@ fun RecipeCard(
 @Composable
 fun TransparentTopAppBar() {
     var showMenu by remember { mutableStateOf(false) }
-    val notifications = listOf("Notification 1", "Notification 2", "Notification 3")
+    // ViewModel'i al
+    val viewModel: RecipeViewModel = hiltViewModel()
+
+    // Room database'den bildirimleri al
+    val notifications by viewModel.notifications.collectAsState(initial = listOf())
     val hasNotifications = notifications.isNotEmpty()
 
     TopAppBar(
@@ -286,22 +293,24 @@ fun TransparentTopAppBar() {
             DropdownMenu(
                 expanded = showMenu,
                 onDismissRequest = { showMenu = false },
-                modifier = Modifier.width(200.dp)
+                modifier = Modifier.width(300.dp)
             ) {
-                notifications.forEach { notification ->
+                notifications.forEachIndexed { index, notification ->
                     DropdownMenuItem(
-                        text = { Text(notification) },
+                        text = { Text(text=notification.title ?: "", maxLines = 1, overflow = TextOverflow.Ellipsis) },
+
                         onClick = {
                             showMenu = false
-                            // Handle notification click (e.g., navigate to details screen)
-                        }
+                        },
+                        modifier = Modifier.background(
+                            if (index % 2 == 0)   Color.White else Color(0xFFF0BDC4)
+                        )
                     )
                 }
             }
         }
     )
 }
-
 
 @Composable
 fun BottomBar(navActions: SpoonacularNavigationActions) {
@@ -316,7 +325,7 @@ fun BottomBar(navActions: SpoonacularNavigationActions) {
         BottomNavigationItem(
             icon = { Icon(imageVector = Icons.Default.Home, contentDescription = "Home" , tint = Color.White) },
             selected = currentRoute == SpoonacularDestination.RECIPES,
-            onClick = { navActions.navigateToHome() }
+            onClick = { navActions.navigateToRecipe() }
         )
         BottomNavigationItem(
             icon = { Icon(imageVector = Icons.Default.Favorite, contentDescription = "Favorites", tint = Color.White) },
@@ -328,7 +337,7 @@ fun BottomBar(navActions: SpoonacularNavigationActions) {
 
 @Composable
 fun CategoryButtons(onCategorySelected: (String) -> Unit) {
-    val categories = listOf("Dessert", "Breakfast", "Salad", "Beverage", "Snack")
+    val categories = listOf("Dessert", "Breakfast", "Salad", "Beverage", "Snack", "Main Course", "Side Dish", "Appetizer", "Bread", "Sauce", "Marinade", "Fingerfood", "Drink")
     val scrollState = rememberScrollState()
 
     Box(
