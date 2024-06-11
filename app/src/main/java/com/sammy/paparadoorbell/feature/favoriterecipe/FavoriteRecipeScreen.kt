@@ -42,7 +42,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
+import com.sammy.paparadoorbell.SpoonacularNavigationActions
+import com.sammy.paparadoorbell.feature.recipe.BottomBar
 import com.sammy.paparadoorbell.ui.theme.regularfont
 import com.sammy.paparadoorbell.ui.theme.ubuntusans
 
@@ -50,6 +53,7 @@ import com.sammy.paparadoorbell.ui.theme.ubuntusans
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun FavoriteRecipeScreen(
+    navActions: SpoonacularNavigationActions,
     viewModel: FavoriteRecipeViewModel = hiltViewModel(),
     navFavRecipe: () -> Unit
 ) {
@@ -67,31 +71,33 @@ fun FavoriteRecipeScreen(
                 }
             )
         },
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 56.dp)
-        ) {
-            favoriteRecipes?.let { recipes ->
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    items(recipes.size) { index ->
-                        Box {
-                            CustomRecipeCard(
-                                id = recipes[index].id ?: 0,
-                                image = recipes[index].image,
-                                name = recipes[index].title,
-                                instruction = recipes[index].instructions,
-                                viewModel = viewModel
-                            )
+        bottomBar = { BottomBar(navActions) },
+        content = { // Add this line
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 56.dp, bottom = 56.dp)
+            ) {
+                favoriteRecipes?.let { recipes ->
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        items(recipes.size) { index ->
+                            Box {
+                                CustomRecipeCard(
+                                    id = recipes[index].id ?: 0,
+                                    image = recipes[index].image,
+                                    name = recipes[index].title,
+                                    instruction = recipes[index].instructions,
+                                    viewModel = viewModel
+                                )
+                            }
                         }
                     }
                 }
             }
-        }
-    }
+        } // Add this line
+    )
 }
 
 @Composable

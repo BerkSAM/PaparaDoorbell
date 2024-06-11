@@ -68,7 +68,7 @@ fun SpoonacularNavigationGraph(
         composable(
             route = SpoonacularDestination.FAVORITE_RECIPE
         ) {
-            FavoriteRecipeScreen() {
+            FavoriteRecipeScreen(navActions) {
                 navActions.navigateToRecipe()
             }
         }
