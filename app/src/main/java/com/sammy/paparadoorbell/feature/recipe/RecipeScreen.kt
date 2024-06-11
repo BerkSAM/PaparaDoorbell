@@ -20,29 +20,43 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Badge
+import androidx.compose.material.BadgedBox
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -58,19 +72,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.sammy.paparadoorbell.R
+import com.sammy.paparadoorbell.SpoonacularDestination
 import com.sammy.paparadoorbell.SpoonacularNavigationActions
 import com.sammy.paparadoorbell.ui.theme.mediumfont
 import com.sammy.paparadoorbell.ui.theme.regularfont
 import com.sammy.paparadoorbell.ui.theme.semiboldfont
 import com.sammy.paparadoorbell.ui.theme.ubuntusans
 
-enum class Tab {
-    HOME,
-    FAVORITE
-}
-
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun RecipeScreen(
@@ -79,16 +92,7 @@ fun RecipeScreen(
     onRecipeClick: (Int) -> Unit,
 ) {
     val state = viewModel.uiState.collectAsState()
-
-    val selectedTab = remember { mutableStateOf(Tab.HOME) }
     val selectedCategory = remember { mutableStateOf("Dessert") }
-
-    LaunchedEffect(selectedTab.value) {
-        when (selectedTab.value) {
-            Tab.HOME -> viewModel.fetchRecipes()
-            Tab.FAVORITE -> viewModel.fetchFavoriteRecipes()
-        }
-    }
 
     LaunchedEffect(selectedCategory.value) {
         viewModel.fetchRecipes(selectedCategory.value)
@@ -96,8 +100,10 @@ fun RecipeScreen(
 
 
     Scaffold(
-        //modifier = Modifier.statusBarsPadding(),
-        bottomBar = { BottomBar(selectedTab, navActions) }
+        topBar = {
+            TransparentTopAppBar()
+        },
+        bottomBar = { BottomBar(navActions) }
     ) {
         Column(
             modifier = Modifier
@@ -157,11 +163,6 @@ fun RecipeScreen(
                         fontSize = 22.sp
                     )
 
-//                    Text(text = "View All",
-//                        fontSize = 16.sp,
-//                        fontWeight = FontWeight.Bold,
-//                        color = Color(0xFFF4526A),
-//                        modifier = Modifier.clickable { /* Handle click */ })
                 }
                 if (state.value.isLoading || state.value.isError) {
                     LazyVerticalGrid(
@@ -177,7 +178,7 @@ fun RecipeScreen(
                         columns = GridCells.Fixed(1),
                         modifier = Modifier.fillMaxWidth(),
                     ) {
-                        items(state.value.recipes.take(10)) { recipe ->
+                        items(state.value.recipes) { recipe ->
                             RecipeCard(
                                 recipe.id,
                                 recipe.title,
@@ -196,7 +197,6 @@ fun RecipeScreen(
         }
     }
 }
-
 
 @Composable
 fun RecipeCard(
@@ -249,70 +249,82 @@ fun RecipeCard(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomBar(selectedTab: MutableState<Tab>, navActions: SpoonacularNavigationActions) {
+fun TransparentTopAppBar() {
+    var showMenu by remember { mutableStateOf(false) }
+    val notifications = listOf("Notification 1", "Notification 2", "Notification 3")
+    val hasNotifications = notifications.isNotEmpty()
+
+    TopAppBar(
+        title = { },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = Color.Transparent
+        ),
+        actions = {
+            BadgedBox(
+                badge = {
+                    if (hasNotifications) {
+                        Badge(
+                            modifier = Modifier
+                                .size(8.dp)
+                                .offset(y = (8).dp, x = (-15).dp), // Adjust dot position
+                            backgroundColor = Color(0xFFF4526A)
+                        ) { /* Empty content - just the dot */ }
+                    }
+                }
+            ) {
+                IconButton(onClick = { showMenu = !showMenu }) {
+                    Icon(
+                        Icons.Default.Notifications,
+                        contentDescription = "Notifications",
+                        tint = Color.White
+                    )
+                }
+            }
+
+            DropdownMenu(
+                expanded = showMenu,
+                onDismissRequest = { showMenu = false },
+                modifier = Modifier.width(200.dp)
+            ) {
+                notifications.forEach { notification ->
+                    DropdownMenuItem(
+                        text = { Text(notification) },
+                        onClick = {
+                            showMenu = false
+                            // Handle notification click (e.g., navigate to details screen)
+                        }
+                    )
+                }
+            }
+        }
+    )
+}
+
+
+@Composable
+fun BottomBar(navActions: SpoonacularNavigationActions) {
+    val navController = rememberNavController()
+    val backStackEntry = navController.currentBackStackEntryAsState()
+    val currentRoute = backStackEntry.value?.destination?.route
+
     BottomNavigation(
         backgroundColor = Color(0xFFF4526A),
         contentColor = Color.White
     ) {
         BottomNavigationItem(
-            icon = {
-                Icon(
-                    painterResource(id = R.drawable.home),
-                    contentDescription = "Home",
-                    tint = Color.White
-                )
-            },
-            selected = selectedTab.value == Tab.HOME,
-            onClick = { selectedTab.value = Tab.HOME }
+            icon = { Icon(imageVector = Icons.Default.Home, contentDescription = "Home" , tint = Color.White) },
+            selected = currentRoute == SpoonacularDestination.RECIPES,
+            onClick = { navActions.navigateToHome() }
         )
         BottomNavigationItem(
-            icon = {
-                Icon(
-                    painterResource(id = R.drawable.fav),
-                    contentDescription = "Favorite",
-                    tint = Color.White
-                )
-            },
-            selected = selectedTab.value == Tab.FAVORITE,
-            onClick = {
-                selectedTab.value = Tab.FAVORITE
-                navActions.navigateToFavoriteRecipe()
-            }
+            icon = { Icon(imageVector = Icons.Default.Favorite, contentDescription = "Favorites", tint = Color.White) },
+            selected = currentRoute == SpoonacularDestination.FAVORITE_RECIPE,
+            onClick = { navActions.navigateToFavoriteRecipe() }
         )
     }
 }
-
-//@Composable
-//fun CategoryButtons(onCategorySelected: (String) -> Unit) {
-//    val categories = listOf("Dessert", "Breakfast", "Salad", "Beverage", "Snack")
-//    Row(
-//        modifier = Modifier
-//            .padding(start = 80.dp, end = 80.dp, bottom = 8.dp)
-//            .horizontalScroll(rememberScrollState()),
-//        horizontalArrangement = Arrangement.SpaceEvenly
-//    ) {
-//        categories.forEachIndexed { index, category ->
-//            if (index != 0) {
-//                Spacer(modifier = Modifier.width(8.dp))
-//            }
-//            Button(
-//                onClick = {
-//                    onCategorySelected(category)
-//                },
-//                colors = ButtonDefaults.buttonColors(
-//                    containerColor = Color(0xFFF4526A),
-//                    contentColor = Color.White
-//                )
-//            ) {
-//                Text(
-//                    text = category,
-//                    fontFamily = regularfont
-//                )
-//            }
-//        }
-//    }
-//}
 
 @Composable
 fun CategoryButtons(onCategorySelected: (String) -> Unit) {

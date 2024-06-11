@@ -11,7 +11,7 @@ import retrofit2.http.Query
 
 interface SpoonacularApiService {
 
-    @GET("/recipes/complexSearch?offset=4&number=10")
+    @GET("/recipes/complexSearch")
     suspend fun getRecipes(
         @Query("apiKey") apiKey: String = API_KEY,
         @Query("type") type: String
