@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.sammy.paparadoorbell.data.source.local.entity.LocalRecipes
 import com.sammy.paparadoorbell.data.source.local.entity.LocalRecipesDetail
+import com.sammy.paparadoorbell.data.source.local.entity.Notification
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -43,4 +44,16 @@ interface RecipesDao {
 
     @Query("UPDATE recipeDetail SET isFav = 0 WHERE id = :recipeId")
     suspend fun markAsFavoriteRecipe(recipeId: Int)
+
+    @Query("SELECT * FROM notifications ORDER BY id DESC LIMIT 10")
+    fun getNotifications(): Flow<List<Notification>>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertNotification(notifications: Notification)
+
+    @Query("DELETE FROM notifications")
+    suspend fun deleteAll()
+
+    @Query("DELETE FROM recipes")
+    suspend fun deleteAllRecipes()
 }

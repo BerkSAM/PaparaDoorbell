@@ -1,5 +1,8 @@
 package com.sammy.paparadoorbell
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -15,13 +18,27 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        val workRequest = PeriodicWorkRequestBuilder<RecipeCheckWorker>(20, TimeUnit.SECONDS).build()
+        val workRequest = PeriodicWorkRequestBuilder<RecipeCheckWorker>(5, TimeUnit.MINUTES).build()
         WorkManager.getInstance(this).enqueue(workRequest)
+        val startDestination = if (isInternetAvailable(this)) {
+            SpoonacularDestination.SPLASH
+        } else {
+            SpoonacularDestination.FAVORITE_RECIPE
+        }
         setContent {
             PaparaDoorbellTheme {
-                SpoonacularNavigationGraph()
+                SpoonacularNavigationGraph(startDestination = startDestination)
             }
         }
     }
+}
+
+private fun isInternetAvailable(context: Context): Boolean {
+    val connectivityManager =
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+    val network = connectivityManager.activeNetwork ?: return false
+    val networkCapabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
+    return networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
 }
 

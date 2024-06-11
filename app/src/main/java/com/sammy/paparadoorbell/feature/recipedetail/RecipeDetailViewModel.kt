@@ -22,7 +22,7 @@ data class RecipeDetailState(
     val recipe: RecipeDetailResponse? = null,
     val isFav: Boolean = false,
 
-)
+    )
 
 @HiltViewModel
 class RecipeDetailViewModel @Inject constructor(
@@ -42,23 +42,29 @@ class RecipeDetailViewModel @Inject constructor(
                     is ApiResult.Loading -> {
                         _uiState.value = RecipeDetailState(isLoading = true)
                     }
+
                     is ApiResult.Success -> {
                         var isFavorite = false
-                        recipesDao.getRecipeDetailById(recipeId).take(1).collect { localRecipeDetail ->
-                            isFavorite = localRecipeDetail.isFav
-                        }
+                        recipesDao.getRecipeDetailById(recipeId).take(1)
+                            .collect { localRecipeDetail ->
+                                isFavorite = localRecipeDetail.isFav
+                            }
                         _uiState.value = RecipeDetailState(
                             isLoading = false,
                             recipe = result.data,
                             isFav = isFavorite,
                         )
                     }
+
                     is ApiResult.Error -> {
                         _uiState.value = RecipeDetailState(
                             isLoading = false,
                             isError = true
                         )
-                        Log.e("RecipeDetailViewModel", "Error fetching recipe details: ${result.message}")
+                        Log.e(
+                            "RecipeDetailViewModel",
+                            "Error fetching recipe details: ${result.message}"
+                        )
                     }
                 }
             }

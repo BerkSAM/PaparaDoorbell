@@ -46,6 +46,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.sammy.paparadoorbell.SpoonacularNavigationActions
 import com.sammy.paparadoorbell.feature.recipe.BottomBar
+import com.sammy.paparadoorbell.feature.recipedetail.stripHtml
 import com.sammy.paparadoorbell.ui.theme.regularfont
 import com.sammy.paparadoorbell.ui.theme.ubuntusans
 
@@ -88,7 +89,7 @@ fun FavoriteRecipeScreen(
                                     id = recipes[index].id ?: 0,
                                     image = recipes[index].image,
                                     name = recipes[index].title,
-                                    instruction = recipes[index].instructions,
+                                    instruction = recipes[index].instructions?.stripHtml(),
                                     viewModel = viewModel
                                 )
                             }

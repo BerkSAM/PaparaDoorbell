@@ -1,5 +1,8 @@
 package com.sammy.paparadoorbell.feature.recipedetail
 
+import android.os.Build
+import android.text.Html
+import android.text.Spanned
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -155,6 +158,18 @@ fun RecipeDetailScreen(
     }
 }
 
+fun String.fromHtml(): Spanned {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY)
+    } else {
+        Html.fromHtml(this)
+    }
+}
+
+fun String.stripHtml(): String {
+    return this.fromHtml().toString()
+}
+
 @Composable
 fun InstructionsCard(instructions: String) {
     Card(
@@ -170,7 +185,7 @@ fun InstructionsCard(instructions: String) {
         )
     ) {
         Text(
-            text = instructions,
+            text = instructions.stripHtml(),
             fontSize = 12.sp,
             fontFamily = regularfont,
             modifier = Modifier.padding(16.dp)
