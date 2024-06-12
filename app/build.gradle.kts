@@ -101,4 +101,9 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.2.1")
     implementation("com.airbnb.android:lottie-compose:6.4.1")
     implementation("androidx.work:work-runtime-ktx:2.7.1")
+    testImplementation("io.mockk:mockk:1.13.11")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0-RC")
+    testImplementation("org.jetbrains.kotlin:kotlin-test:1.6.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
+    testImplementation("androidx.arch.core:core-testing:2.1.0")
 }

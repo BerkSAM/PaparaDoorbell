@@ -19,7 +19,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -71,9 +70,12 @@ fun HomeScreen(navRecipes: () -> Unit) {
                             modifier = Modifier.size(250.dp, 50.dp), onClick = {
                                 navRecipes()
                             },
-                            colors = ButtonDefaults.buttonColors(containerColor = CustomColors.PRIMARY_COLOR)
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = CustomColors.PRIMARY_COLOR,
+                                contentColor = Color.White
+                            )
                         ) {
-                            Text(fontSize = 20.sp, fontWeight = FontWeight.Bold, text = "Start")
+                            Text(fontSize = 20.sp, fontFamily = boldfont, text = "Start")
                         }
                     }
                 }
