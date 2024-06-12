@@ -15,7 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -74,7 +74,7 @@ fun CustomRecipeCard(id: Int, image: String?, name: String?, instruction: String
                             .align(Alignment.TopEnd)
                     ) {
                         Icon(
-                            imageVector =  Icons.Filled.Favorite,
+                            imageVector =  Icons.Filled.Delete,
                             contentDescription = "Remove from favorites" ,
                             modifier = Modifier
                                 .size(24.dp)
@@ -82,7 +82,7 @@ fun CustomRecipeCard(id: Int, image: String?, name: String?, instruction: String
                                 .clickable {
                                     viewModel.markAsUnFavorite(id)
                                 },
-                            tint = Color.Red
+                            tint = Color.White
                         )
                     }
                 }
@@ -109,6 +109,7 @@ fun CustomRecipeCard(id: Int, image: String?, name: String?, instruction: String
                         fontSize = 14.sp
                     ),
                     modifier = Modifier.padding(14.dp),
+                    color = Color.Black,
                     fontFamily = regularfont
                 )
             }

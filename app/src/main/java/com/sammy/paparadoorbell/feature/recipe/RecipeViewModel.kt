@@ -58,7 +58,7 @@ class RecipeViewModel @Inject constructor(
                     }
 
                     is ApiResult.Success -> {
-                        recipesDao.deleteAllRecipes()
+                        //recipesDao.deleteAllRecipes()
                         result.data?.results?.let { recipesFromApi ->
                             _recipes.value = recipesFromApi
                             recipesFromApi.forEach { recipeFromApi ->

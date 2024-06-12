@@ -77,7 +77,8 @@ fun TransparentTopAppBar() {
                             Text(
                                 text = notification.title ?: "",
                                 maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
+                                overflow = TextOverflow.Ellipsis,
+                                color = Color.Black,
                             )
                         },
 
