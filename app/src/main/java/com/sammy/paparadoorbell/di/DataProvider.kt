@@ -15,7 +15,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -76,7 +75,6 @@ class DataProviderModule {
     @Singleton
     fun provideRetrofit(): Retrofit {
         val client = OkHttpClient.Builder()
-            .addInterceptor(ApiKeyInterceptor("8d2d3c918120482ea0cdde614e6bd2df"))
             .build()
 
         return Retrofit.Builder()
@@ -84,14 +82,5 @@ class DataProviderModule {
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-    }
-}
-
-class ApiKeyInterceptor(private val apiKey: String) : Interceptor {
-    override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
-        var request = chain.request()
-        val url = request.url.newBuilder().addQueryParameter("8d2d3c918120482ea0cdde614e6bd2df", apiKey).build()
-        request = request.newBuilder().url(url).build()
-        return chain.proceed(request)
     }
 }
