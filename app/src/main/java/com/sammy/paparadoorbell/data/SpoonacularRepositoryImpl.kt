@@ -16,18 +16,19 @@ class SpoonacularRepositoryImpl @Inject constructor(
     private val localDataSource: RecipesDao
 ) : SpoonacularRepository {
 
-    override suspend fun getRecipes(type:String): Flow<ApiResult<RecipesResponse>> {
+    override suspend fun getRecipes(type: String): Flow<ApiResult<RecipesResponse>> {
         val recipesResponse = networkDataSource.getRecipes(type)
         recipesResponse.collect { value ->
             when (value) {
                 is ApiResult.Success -> {
                     localDataSource.insertRecipes(value.data?.toLocal().orEmpty())
-                    Log.d("SpoonacularRepository", "getRecipes Work")
 
                 }
+
                 is ApiResult.Error -> {
                     Log.e("SpoonacularRepository", "Error: ${value.message}")
                 }
+
                 else -> {
                     Log.d("SpoonacularRepository", "Recipe: ${value}")
                 }
@@ -41,15 +42,14 @@ class SpoonacularRepositoryImpl @Inject constructor(
         recipeDetailResponse.collect { value ->
             when (value) {
                 is ApiResult.Success -> {
-//                    value.data?.results?.forEach { recipe ->
-                        Log.d("SpoonacularRepository", "Recipe22: ${value}")
                     val localRecipeDetail = value.data?.toLocalRecipeDetail()
                     localRecipeDetail?.let { localDataSource.insertRecipeDetail(it) }
-
                 }
+
                 is ApiResult.Error -> {
                     Log.e("SpoonacularRepository", "Error: ${value.message}")
                 }
+
                 else -> {
                     Log.d("SpoonacularRepository", "Recipe: ${value}")
                 }
@@ -57,7 +57,6 @@ class SpoonacularRepositoryImpl @Inject constructor(
         }
         return recipeDetailResponse
     }
-
 
 
 }

@@ -1,30 +1,18 @@
 package com.sammy.paparadoorbell.feature.recipedetail
 
-import android.os.Build
-import android.text.Html
-import android.text.Spanned
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -37,12 +25,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.compose.rememberAsyncImagePainter
+import com.sammy.paparadoorbell.feature.recipedetail.components.IngredientList
+import com.sammy.paparadoorbell.feature.recipedetail.components.InstructionsCard
+import com.sammy.paparadoorbell.feature.recipedetail.components.RecipeImageHeader
 import com.sammy.paparadoorbell.ui.theme.mediumfont
 import com.sammy.paparadoorbell.ui.theme.regularfont
 
@@ -77,7 +66,11 @@ fun RecipeDetailScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = { navBack() }) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = MaterialTheme.colorScheme.onSurface)
+                        Icon(
+                            Icons.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
                     }
                 },
                 actions = {
@@ -109,7 +102,6 @@ fun RecipeDetailScreen(
         ) {
             item {
                 RecipeImageHeader(state.value.recipe?.image)
-
             }
             item {
                 Column(Modifier.padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 16.dp)) {
@@ -145,7 +137,12 @@ fun RecipeDetailScreen(
                     text = "Instructions",
                     fontFamily = mediumfont,
                     color = MaterialTheme.colorScheme.onBackground,
-                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 16.dp)
+                    modifier = Modifier.padding(
+                        start = 16.dp,
+                        end = 16.dp,
+                        top = 24.dp,
+                        bottom = 16.dp
+                    )
                 )
             }
             item {
@@ -155,93 +152,5 @@ fun RecipeDetailScreen(
             }
         }
 
-    }
-}
-
-fun String.fromHtml(): Spanned {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY)
-    } else {
-        Html.fromHtml(this)
-    }
-}
-
-fun String.stripHtml(): String {
-    return this.fromHtml().toString()
-}
-
-@Composable
-fun InstructionsCard(instructions: String) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant,
-            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
-        ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 8.dp
-        )
-    ) {
-        Text(
-            text = instructions.stripHtml(),
-            fontSize = 12.sp,
-            fontFamily = regularfont,
-            modifier = Modifier.padding(16.dp)
-        )
-    }
-}
-
-@Composable
-fun RecipeImageHeader(imageUrl: String?) {
-    Card(
-        shape = RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(250.dp)
-            .padding(16.dp),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 8.dp
-        )
-    ) {
-        Image(
-            painter = rememberAsyncImagePainter(model = imageUrl),
-            contentDescription = "Recipe Image",
-            modifier = Modifier
-                .fillMaxSize(),
-            contentScale = ContentScale.Crop
-        )
-    }
-}
-
-@Composable
-fun IngredientList(ingredients: List<com.sammy.paparadoorbell.data.source.network.response.recipesDetail.ExtendedIngredient?>?) {
-    Column(Modifier.padding(8.dp)) {
-        ingredients?.chunked(3)?.forEach { rowIngredients -> // Adjust the chunk size based on how many items you want per row
-            Row(
-                Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp) // Add spacing between items
-            ) {
-                rowIngredients.forEach { ingredient ->
-                    if (ingredient != null) {
-                        Box(
-                            modifier = Modifier
-                                .size(110.dp, 150.dp) // Set the fixed size with height of 130.dp
-                                .background(MaterialTheme.colorScheme.surfaceVariant, shape = RoundedCornerShape(8.dp))
-                                .padding(8.dp)
-                        ) {
-                            Text(
-                                text = "- ${ingredient.original}",
-                                fontFamily = regularfont,
-                                fontSize = 12.sp,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                    }
-                }
-            }
-            Spacer(modifier = Modifier.height(8.dp)) // Add vertical spacing between rows
-        }
     }
 }

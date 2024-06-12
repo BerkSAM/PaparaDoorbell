@@ -19,6 +19,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.sammy.paparadoorbell.R
+import com.sammy.paparadoorbell.ui.theme.CustomColors
 import com.sammy.paparadoorbell.ui.theme.meriandamedium
 import kotlinx.coroutines.delay
 
@@ -27,21 +28,19 @@ fun SplashScreen(
     onSplashFinished: () -> Unit
 ) {
     LaunchedEffect(Unit) {
+        //Waiting for Lottie to appear.
         delay(2000)
         onSplashFinished()
     }
 
-
-
-    // center of text
     Scaffold(
-        containerColor = Color(0xFFF4526A),
+        containerColor = CustomColors.PRIMARY_COLOR,
     ) {
         Box(
             modifier = Modifier
                 .padding(it)
                 .fillMaxSize(),
-            contentAlignment = Alignment.TopCenter // Add this line
+            contentAlignment = Alignment.TopCenter
         ) {
             val composition by rememberLottieComposition(
                 spec = LottieCompositionSpec.RawRes(R.raw.splashlottie)
