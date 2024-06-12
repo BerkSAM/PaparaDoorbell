@@ -48,5 +48,4 @@ class SpoonacularNavigationActions(private val navController: NavHostController)
             }
         }
     }
-
 }

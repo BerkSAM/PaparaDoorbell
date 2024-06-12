@@ -9,7 +9,7 @@ class RecipeCheckWorker(appContext: Context, workerParams: WorkerParameters):
     Worker(appContext, workerParams) {
 
     override fun doWork(): Result {
-        Log.d("RecipeCheckWorker", "Merhaba Papara Bu Bir Worker Örneğidir.")
+        Log.d("RecipeCheckWorker", "Hello Papara This is an example of a Worker.")
         return Result.success()
     }
 }

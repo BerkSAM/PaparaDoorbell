@@ -18,5 +18,4 @@ class SpoonacularNetworkDataSource @Inject constructor(
     override suspend fun getRecipesDetail(recipeId: Int): Flow<ApiResult<RecipeDetailResponse>> = apiFlow {
         spoonacularApi.getRecipesDetail(recipeId)
     }
-
 }

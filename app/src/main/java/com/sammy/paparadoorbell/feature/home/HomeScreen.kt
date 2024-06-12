@@ -24,6 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sammy.paparadoorbell.R
+import com.sammy.paparadoorbell.ui.theme.CustomColors
 import com.sammy.paparadoorbell.ui.theme.boldfont
 import com.sammy.paparadoorbell.ui.theme.mediumfont
 
@@ -35,7 +36,7 @@ fun HomeScreen(navRecipes: () -> Unit) {
         BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
             val halfHeight = this.maxHeight / 2
             Image(
-                painter = painterResource(id = R.drawable.homescreenbg),
+                painter = painterResource(id = R.drawable.homescreenbgai),
                 contentDescription = "Background",
                 modifier = Modifier.fillMaxSize(),
                 contentScale = androidx.compose.ui.layout.ContentScale.Crop
@@ -70,7 +71,7 @@ fun HomeScreen(navRecipes: () -> Unit) {
                             modifier = Modifier.size(250.dp, 50.dp), onClick = {
                                 navRecipes()
                             },
-                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFF4526A))
+                            colors = ButtonDefaults.buttonColors(containerColor = CustomColors.PRIMARY_COLOR)
                         ) {
                             Text(fontSize = 20.sp, fontWeight = FontWeight.Bold, text = "Start")
                         }
