@@ -29,15 +29,22 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.sammy.paparadoorbell.SpoonacularNavigationActions
 import com.sammy.paparadoorbell.feature.recipedetail.components.IngredientList
 import com.sammy.paparadoorbell.feature.recipedetail.components.InstructionsCard
 import com.sammy.paparadoorbell.feature.recipedetail.components.RecipeImageHeader
+import com.sammy.paparadoorbell.ui.componentes.BottomBar
 import com.sammy.paparadoorbell.ui.theme.mediumfont
 import com.sammy.paparadoorbell.ui.theme.regularfont
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Face
+import androidx.compose.ui.Alignment
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecipeDetailScreen(
+    navActions: SpoonacularNavigationActions,
     recipeId: Int,
     navBack: () -> Unit,
     onFavoriteClick: () -> Unit,
@@ -91,7 +98,8 @@ fun RecipeDetailScreen(
                     }
                 }
             )
-        }
+        },
+        bottomBar = { BottomBar(navActions) }
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
@@ -111,12 +119,43 @@ fun RecipeDetailScreen(
                         color = MaterialTheme.colorScheme.onBackground
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = "${state.value.recipe?.readyInMinutes} Minutes - ${state.value.recipe?.servings} Serving",
-                        fontSize = 12.sp,
-                        fontFamily = regularfont,
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.padding(end = 16.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.DateRange,
+                                contentDescription = "Time",
+                                tint = MaterialTheme.colorScheme.onBackground
+                            )
+                            Text(
+                                text = "${state.value.recipe?.readyInMinutes} Minutes",
+                                fontSize = 12.sp,
+                                fontFamily = regularfont,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                        }
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Face,
+                                contentDescription = "Servings",
+                                tint = MaterialTheme.colorScheme.onBackground
+                            )
+                            Text(
+                                text = "${state.value.recipe?.servings} Serving",
+                                fontSize = 12.sp,
+                                fontFamily = regularfont,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                        }
+                    }
                 }
             }
 

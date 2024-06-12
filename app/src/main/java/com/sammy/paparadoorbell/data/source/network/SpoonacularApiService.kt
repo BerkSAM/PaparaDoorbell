@@ -17,8 +17,11 @@ interface SpoonacularApiService {
         @Query("type") type: String
     ): Response<RecipesResponse>
 
-    @GET("/recipes/{recipeId}/information?apiKey=71ae27f1c59e4fb48268f7120256d524")
-    suspend fun getRecipesDetail(@Path("recipeId") recipeId: Int): Response<RecipeDetailResponse>
+    @GET("/recipes/{recipeId}/information")
+    suspend fun getRecipesDetail(
+        @Path("recipeId") recipeId: Int,
+        @Query("apiKey") apiKey: String = API_KEY
+    ): Response<RecipeDetailResponse>
 
 
 }
