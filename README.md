@@ -13,7 +13,7 @@ Papara Doorbell (Recipara), kullanıcıların çeşitli tarifleri keşfetmelerin
 
 1. Projeyi GitHub'dan klonlayın veya indirin.
 2. Android Studio'da projeyi açın.
-3. `local.properties` dosyasına Spoonacular API anahtarınızı ekleyin: `API_KEY="YOUR_API_KEY"`
+3. `local.properties` dosyasına Spoonacular API anahtarınızı ekleyin: `API_KEY=YOUR_API_KEY`
 4. Run 'app' komutunu kullanarak uygulamayı çalıştırın.
 
 ## Kullanılan Teknolojiler
