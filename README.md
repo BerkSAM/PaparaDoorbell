@@ -1,22 +1,23 @@
 # Papara Doorbell (Recipara)
 
-Papara Doorbell (Recipara), kullanıcıların çeşitli tarifleri keşfetmelerine ve favori tariflerini kaydetmelerine olanak sağlayan bir Android uygulamasıdır. Uygulama, Spoonacular API'yi kullanarak tarif verilerini alır ve bu verileri kullanıcıya sunar.
+Papara Doorbell (Recipara) is an Android application that allows users to discover various recipes and save their favorite recipes. The application fetches recipe data using the Spoonacular API and presents it to the user.
 
-## Özellikler
+## Features
 
-- **Tarif Keşfetme**: Uygulama, kullanıcılara çeşitli tarifler sunar. Kullanıcılar, tarifleri kategoriye göre filtreleyebilirler.
-- **Tarif Detayları**: Kullanıcılar, bir tarifin detaylarını görüntüleyebilirler. Bu detaylar arasında malzemeler, hazırlık süresi ve porsiyon sayısı bulunur.
-- **Favori Tarifler**: Kullanıcılar, beğendikleri tarifleri favorilere ekleyebilirler. Favori tarifler, daha sonra hızlı ve kolay bir şekilde erişilebilir.
-- **Bildirimler**: Uygulama, yeni tarifler geldiğinde kullanıcıya bildirim gönderir.
+- **Recipe Discovery**: The app presents users with various recipes. Users can filter recipes by category.
+- **Recipe Details**: Users can view the details of a recipe, including ingredients, preparation time, and serving size.
+- **Favorite Recipes**: Users can add recipes they like to their favorites. Favorite recipes are easily accessible for quick reference.
+- **Notifications**: The app sends notifications to users when new recipes are available.
 
-## Kurulum
+## Installation
 
-1. Projeyi GitHub'dan klonlayın veya indirin.
-2. Android Studio'da projeyi açın.
-3. `local.properties` dosyasına Spoonacular API anahtarınızı ekleyin: `API_KEY=YOUR_API_KEY`
-4. Run 'app' komutunu kullanarak uygulamayı çalıştırın.
+1. Clone or download the project from GitHub.
+2. Open the project in Android Studio.
+3. Add your Spoonacular API key to the `local.properties` file: `API_KEY=YOUR_API_KEY`
+4. Add buildConfig = true in buildFeatures on build.gradle.kts(Module:app)
+5. Run the app using the 'app' command.
 
-## Kullanılan Teknolojiler
+## Technologies Used
 
 - Kotlin
 - Android Jetpack Compose
@@ -28,21 +29,21 @@ Papara Doorbell (Recipara), kullanıcıların çeşitli tarifleri keşfetmelerin
 - ViewModel - UI State Management
 - JUnit and Mockito (Unit testing)
 
-## Mimari
+## Architecture
 
-Uygulama, modern Android uygulama geliştirme tekniklerini ve en iyi uygulamaları kullanarak oluşturulmuştur. Uygulamanın mimarisi, aşağıdaki bileşenleri içerir:
+The application is built using modern Android application development techniques and best practices, including the following components:
 
-- **ViewModel**: UI ile ilgili verilerin saklanmasından ve yönetilmesinden sorumludur. ViewModel, UI'nin durumunu yönetir ve UI'nin durumunu değiştirebilecek işlemleri gerçekleştirir.
-- **Repository**: Uygulamanın veri kaynaklarına erişim sağlar. Repository, verileri çeşitli kaynaklardan alır ve bu verileri ViewModel'e sağlar.
-- **Room Database**: Uygulamanın yerel veri kaynağıdır. Room, SQLite üzerine inşa edilmiştir ve verilerin yerel olarak saklanmasını ve alınmasını sağlar.
-- **Retrofit**: Uygulamanın ağ veri kaynağıdır. Retrofit, HTTP API'leri ile etkileşim kurmak için kullanılır.
-- **Coil**: Coil, Kotlin için hafif bir görüntü yükleme kütüphanesidir. Coil, görüntüleri yüklemek ve önbelleğe almak için kullanılır.
+- **ViewModel**: Responsible for storing and managing data related to the UI. The ViewModel manages the state of the UI and performs operations that can change the state of the UI.
+- **Repository**: Provides access to the application's data sources. The Repository fetches data from various sources and provides it to the ViewModel.
+- **Room Database**: The local data source for the application. Room is built on top of SQLite and enables storing and retrieving data locally.
+- **Retrofit**: The network data source for the application. Retrofit is used to interact with HTTP APIs.
+- **Coil**: Coil is a lightweight image loading library for Kotlin. Coil is used for loading and caching images.
 
-## Testler
+## Testing
 
-Uygulama, unit test ile test edilmiştir. Testler, JUnit ve Mockito kullanılarak yazılmıştır.
+The application has been tested using unit tests. The tests are written using JUnit and Mockito.
 
-## Projeden Görüntüler
+## Project Screenshots
 <img src="https://github.com/BerkSAM/PaparaDoorbell/assets/95809835/6098a279-c319-4d02-84e9-769fce427148" alt="UygulamaIcon" width="300"/>
 <img src="https://github.com/BerkSAM/PaparaDoorbell/assets/95809835/c642e5d1-7d45-477b-a82d-e0a0777c2cca" alt="LottieScreen" width="300"/>
 <img src="https://github.com/BerkSAM/PaparaDoorbell/assets/95809835/af83d05f-784a-46ba-93d2-f3ab033a9deb" alt="HomaScreen" width="300"/>
